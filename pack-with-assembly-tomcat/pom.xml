@@ -1,0 +1,255 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.vindell</groupId>
+		<artifactId>pack-with-assembly</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>pack-with-assembly-tomcat</artifactId>
+	<packaging>war</packaging>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- http://maven.apache.org/plugins/maven-assembly-plugin/ -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin.version}</version>
+					<executions>
+						<!-- 若要同时打多个包（如windows和linux不同系统的包），可配置多个execution，此处只打zip，因此配置一个 -->
+						<execution>
+							<!-- id标识，唯一即可 -->
+							<id>make-tomcat-pack</id>
+							<!-- 设置package阶段进行 -->
+							<phase>package</phase>
+							<goals>
+								<!-- 只运行一次 -->
+								<goal>single</goal>
+							</goals>
+							<configuration>
+								<!-- 输出的最终名称，自动添加格式后缀（如zip），当前示例为jsw-test.zip -->
+								<finalName>pack-test</finalName>
+								<!-- 配置是否添加id到名称中，若为true，当前示例中，则为jsw-test-zip.zip，false即不添加，只是jsw-test.zip；
+								若同时打多个包，则可设为true，分别添加id以作区分-->
+								<appendAssemblyId>true</appendAssemblyId>
+								<!-- 打包的输出目录，可自定义，${project.build.directory}为编译输出目录，即target目录 -->
+								<outputDirectory>${project.build.directory}</outputDirectory>
+								<descriptors>
+									<descriptor>src/main/assembly/tomcat-pack-all.xml</descriptor>
+								</descriptors>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${maven-dependency-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>unpack-tomcat</id>
+							<phase>prepare-package<!-- or any other valid maven phase --></phase>
+							<goals>
+								<goal>unpack-dependencies</goal>
+							</goals>
+							<configuration>
+								<includeGroupIds>org.apache.tomcat</includeGroupIds>
+								<includeArtifactIds>apache-tomcat</includeArtifactIds>
+								<includeTypes>zip</includeTypes>
+								<outputDirectory>${project.build.directory}</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<!--环境检查插件：代码编译前的环境检查 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
+			<!-- 编译插件：编译主代码至主输出目录 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<!-- 资源插件：复制主资源文件至主输出目录 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<!-- 单元测试插件 ：执行测试用例 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<!-- jar包生成插件 ：创建项目jar包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<!-- 源码插件:发布时自动将源码同时发布 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<!-- 依赖插件：拷贝依赖组件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			<!-- 依赖插件：自定义打包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+			</plugin>
+			<!-- 安装插件：将项目输出构件安装到本地仓库 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+			</plugin>
+			<!-- 发布插件 ：将项目输出构件部署到远程仓库 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+			</plugin>
+			<!-- 打包插件：war打包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>disable-javadoc-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<!--环境检查插件：代码编译前的环境检查 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+					</plugin>
+					<!-- 编译插件：编译主代码至主输出目录 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+					</plugin>
+					<!-- 资源插件：复制主资源文件至主输出目录 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+					</plugin>
+					<!-- 单元测试插件 ：执行测试用例 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+					</plugin>
+					<!-- jar包生成插件 ：创建项目jar包 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+					</plugin>
+					<!-- 源码插件:发布时自动将源码同时发布 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
+					<!-- javadoc -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+					</plugin>
+					<!-- 打包插件：war打包 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+					</plugin>
+					<!-- 依赖插件：拷贝依赖组件 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
+					<!-- 依赖插件：自定义打包 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+					</plugin>
+					<!-- 安装插件：将项目输出构件安装到本地仓库 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-install-plugin</artifactId>
+					</plugin>
+					<!-- 签名插件：对构建的jar、javadoc、source使用gpg来签名 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+					</plugin>
+					<!-- 发布插件 ：将项目输出构件部署到远程仓库 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+					</plugin>
+					<!-- 版本自动升级插件 ：重置版本号 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+	<properties>
+		<apache-tomcat.version>9.0.13</apache-tomcat.version>
+		<apache-tomcat-atlassian.version>${apache-tomcat.version}-atlassian-hosted</apache-tomcat-atlassian.version>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- https://mvnrepository.com/artifact/org.apache.tomcat/apache-tomcat -->
+			<dependency>
+			    <groupId>org.apache.tomcat</groupId>
+			    <artifactId>apache-tomcat</artifactId>
+			    <version>${apache-tomcat-atlassian.version}</version>
+			    <type>zip</type>
+			</dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/apache-tomcat -->
+		<dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>apache-tomcat</artifactId>
+		    <type>zip</type>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+	
+
+</project>
