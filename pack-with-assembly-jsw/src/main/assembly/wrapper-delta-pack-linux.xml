@@ -5,14 +5,12 @@
 	<id>jsw-linux</id>
 	<formats>
 		<!-- 打包的格式 -->
-		<format>dir</format>
-		<!-- 
-		<format>tar.bz2</format>
+		<!-- <format>dir</format> -->
+		<!-- <format>tar.bz2</format> -->
 		<format>tar.gz</format>
-		<format>jar</format>
-		<format>war</format>
-		-->
-		<format>zip</format>
+		<!-- <format>jar</format> -->
+		<!-- <format>war</format> -->
+		<!-- <format>zip</format> -->
 	</formats>
 	<!-- 打包的文件不包含项目目录，压缩包下直接是文件 -->
 	<includeBaseDirectory>false</includeBaseDirectory>	
@@ -22,7 +20,7 @@
 			<!-- 是否把当前项目的输出jar包并使用，true则会把当前项目输出为jar包到输出目录,false不输出 -->
 			<useProjectArtifact>false</useProjectArtifact>
 			<!-- 依赖输出目录，相对输出目录的根目录，当前示例把依赖输出到lib目录 -->
-			<outputDirectory>/lib</outputDirectory>
+			<outputDirectory>lib</outputDirectory>
 			<scope>runtime</scope>
 		</dependencySet>		
 	</dependencySets>
@@ -30,29 +28,35 @@
 	<files>
 		<file>
 			<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-			<outputDirectory>/lib</outputDirectory>
+			<outputDirectory>lib</outputDirectory>
 		</file>
 		<file>
 			<source>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}/doc/wrapper-community-license-1.3.txt</source>
-			<outputDirectory>/bin/jsw/license</outputDirectory>
+			<outputDirectory>bin/jsw/license</outputDirectory>
 			<destName>LICENSE.txt</destName>
 		</file>
 		<file>
 			<source>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}/bin/demoapp</source>
-			<outputDirectory>/bin</outputDirectory>
+			<outputDirectory>bin</outputDirectory>
 			<destName>${project.pack.name}</destName>
+		</file>
+		<file>
+			<source>${project.basedir}/README.md</source>
+			<outputDirectory></outputDirectory>
+			<destName>README.md</destName>
+		</file>
+		<file>
+			<source>${project.basedir}/LICENSE</source>
+			<outputDirectory></outputDirectory>
+			<destName>LICENSE</destName>
+		</file>
+		<file>
+			<source>${project.basedir}/COPYRIGHT</source>
+			<outputDirectory></outputDirectory>
+			<destName>COPYRIGHT</destName>
 		</file>
 	</files>
 	<fileSets>
-		<fileSet>  
-            <directory>${project.basedir}</directory>  
-            <outputDirectory>/</outputDirectory>  
-            <includes>  
-                <include>README.md</include>  
-                <include>LICENSE</include>  
-                <include>COPYRIGHT</include>  
-            </includes>  
-        </fileSet>
 		<fileSet>
 			<directory>${project.basedir}/src/main/resources</directory>
 			<includes>
@@ -60,7 +64,7 @@
 				<include>application.yml</include>
 				<include>conf/**</include>
 			</includes>
-			<outputDirectory>/conf</outputDirectory>
+			<outputDirectory>conf</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
@@ -79,7 +83,7 @@
 				<exclude>bin/wrapper-windows**</exclude>
 				<exclude>bin/**.bat</exclude>
 			</excludes>
-			<outputDirectory>/bin/jsw</outputDirectory>
+			<outputDirectory>bin/jsw</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
@@ -99,21 +103,21 @@
 				<exclude>lib/libwrapper-solaris**</exclude>
 				<exclude>lib/wrapper-windows**</exclude>
 			</excludes>
-			<outputDirectory>/bin/jsw</outputDirectory>
+			<outputDirectory>bin/jsw</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
 			<includes>
 				<include>logs/**</include>
 			</includes>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/src/main/resources</directory>
 			<includes>
 				<include>temp/**</include>
 			</includes>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>

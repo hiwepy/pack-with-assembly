@@ -75,7 +75,7 @@
 								<outputDirectory>${project.build.directory}</outputDirectory>
 								<descriptors>
 									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-all.xml</descriptor> -->
-									<descriptor>src/main/assembly/wrapper-delta-pack-aix.xml</descriptor>
+									<descriptor>src/main/assembly/wrapper-delta-pack-aix.xml</descriptor> 
 									<descriptor>src/main/assembly/wrapper-delta-pack-freebsd.xml</descriptor>
 									<descriptor>src/main/assembly/wrapper-delta-pack-hpux.xml</descriptor>
 									<descriptor>src/main/assembly/wrapper-delta-pack-linux.xml</descriptor>
