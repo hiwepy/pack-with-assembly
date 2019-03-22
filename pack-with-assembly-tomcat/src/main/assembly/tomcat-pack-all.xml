@@ -2,28 +2,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
 	<!-- id标识，唯一即可，若pom中的appendAssemblyId设置为true，则会添加此id作为后缀 -->
-	<id>tomcat</id>
+	<id>tomcat-${project.version}</id>
 	<formats>
 		<!-- 打包的格式 -->
 		<format>dir</format>
-		<!-- 
-		<format>tar.bz2</format>
-		<format>tar.gz</format>
-		<format>jar</format>
-		<format>war</format>
-		-->
-		<format>zip</format>
+		<!-- <format>tar.bz2</format> -->
+		<!-- <format>tar.gz</format> -->
+		<!-- <format>jar</format> -->
+		<!-- <format>war</format> -->
+		<!-- <format>zip</format> -->
 	</formats>
 	<!-- 打包的文件不包含项目目录，压缩包下直接是文件 -->
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<!-- 文件输出 -->
-	<files>
-		<file>
-			<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-			<destName>${project.artifactId}.${project.packaging}</destName>
-			<outputDirectory>/webapps</outputDirectory>
-		</file>
-	</files>
 	<fileSets>
 		<fileSet>
 			<directory>${project.build.directory}/apache-tomcat-${apache-tomcat.version}</directory>
@@ -31,7 +22,7 @@
 			<includes>
 				<include>bin/**</include>
 			</includes>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/apache-tomcat-${apache-tomcat.version}</directory>
@@ -39,7 +30,7 @@
 				<exclude>bin/**</exclude>
 				<exclude>webapps/**</exclude>
 			</excludes>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.directory}/apache-tomcat-${apache-tomcat.version}</directory>
@@ -52,7 +43,23 @@
 				<!-- <exclude>webapps/host-manager/**</exclude>
 				<exclude>webapps/manager/**</exclude> -->
 			</excludes>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<fileMode>0755</fileMode>
+			<includes>
+				<include>jre${jre.version}/**</include>
+			</includes>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>
+	<files>
+		<file>
+			<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+			<destName>${project.artifactId}.${project.packaging}</destName>
+			<outputDirectory>webapps</outputDirectory>
+		</file>
+	</files>
+	
 </assembly>

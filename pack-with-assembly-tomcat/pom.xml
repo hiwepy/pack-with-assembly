@@ -55,12 +55,24 @@
 							<id>unpack-tomcat</id>
 							<phase>prepare-package<!-- or any other valid maven phase --></phase>
 							<goals>
-								<goal>unpack-dependencies</goal>
+								<goal>unpack</goal>
 							</goals>
 							<configuration>
-								<includeGroupIds>org.apache.tomcat</includeGroupIds>
+								<artifactItems>  
+							        <artifactItem>  
+							            <groupId>org.apache.tomcat</groupId>  
+							            <artifactId>apache-tomcat</artifactId>  
+							            <type>zip</type>
+							        </artifactItem>
+							        <artifactItem> 
+							        	<groupId>com.oracle</groupId>
+									    <artifactId>jre</artifactId>
+									    <type>zip</type>
+							        </artifactItem>
+							    </artifactItems>  
+								<!-- <includeGroupIds>org.apache.tomcat</includeGroupIds>
 								<includeArtifactIds>apache-tomcat</includeArtifactIds>
-								<includeTypes>zip</includeTypes>
+								<includeTypes>zip</includeTypes> -->
 								<outputDirectory>${project.build.directory}</outputDirectory>
 							</configuration>
 						</execution>
@@ -223,6 +235,8 @@
 	<properties>
 		<apache-tomcat.version>9.0.13</apache-tomcat.version>
 		<apache-tomcat-atlassian.version>${apache-tomcat.version}-atlassian-hosted</apache-tomcat-atlassian.version>
+		<jre.version>1.8.0_202</jre.version>
+		<jre.platform>linux-x64</jre.platform>
 	</properties>
 	
 	<dependencyManagement>
@@ -236,20 +250,28 @@
 			    <type>zip</type>
 			</dependency>
 			
+			<dependency>
+			    <groupId>com.oracle</groupId>
+			    <artifactId>jre</artifactId>
+			    <version>${jre.version}-${jre.platform}</version>
+			    <type>zip</type>
+			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 	
 	<dependencies>
-		
 		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/apache-tomcat -->
 		<dependency>
 		    <groupId>org.apache.tomcat</groupId>
 		    <artifactId>apache-tomcat</artifactId>
 		    <type>zip</type>
-			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+		    <groupId>com.oracle</groupId>
+		    <artifactId>jre</artifactId>
+		    <type>zip</type>
+		</dependency>
 	</dependencies>
-	
 
 </project>

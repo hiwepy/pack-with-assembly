@@ -75,13 +75,13 @@
 								<outputDirectory>${project.build.directory}</outputDirectory>
 								<descriptors>
 									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-all.xml</descriptor> -->
-									<descriptor>src/main/assembly/wrapper-delta-pack-aix.xml</descriptor> 
+									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-aix.xml</descriptor> 
 									<descriptor>src/main/assembly/wrapper-delta-pack-freebsd.xml</descriptor>
-									<descriptor>src/main/assembly/wrapper-delta-pack-hpux.xml</descriptor>
+									<descriptor>src/main/assembly/wrapper-delta-pack-hpux.xml</descriptor> -->
 									<descriptor>src/main/assembly/wrapper-delta-pack-linux.xml</descriptor>
-									<descriptor>src/main/assembly/wrapper-delta-pack-macosx.xml</descriptor>
+									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-macosx.xml</descriptor>
 									<descriptor>src/main/assembly/wrapper-delta-pack-solaris.xml</descriptor>
-									<descriptor>src/main/assembly/wrapper-delta-pack-windows.xml</descriptor>
+									<descriptor>src/main/assembly/wrapper-delta-pack-windows.xml</descriptor> -->
 								</descriptors>
 							</configuration>
 						</execution>
@@ -97,12 +97,24 @@
 							<id>unpack-wrapper</id>
 							<phase>prepare-package<!-- or any other valid maven phase --></phase>
 							<goals>
-								<goal>unpack-dependencies</goal>
+								<goal>unpack</goal>
 							</goals>
 							<configuration>
-								<includeGroupIds>com.tanukisoftware</includeGroupIds>
+								<artifactItems>  
+							        <artifactItem>  
+							            <groupId>com.tanukisoftware</groupId>  
+							            <artifactId>wrapper-delta-pack</artifactId>  
+							            <type>zip</type>
+							        </artifactItem>
+							        <artifactItem> 
+							        	<groupId>com.oracle</groupId>
+									    <artifactId>jre</artifactId>
+									    <type>zip</type>
+							        </artifactItem>
+							    </artifactItems> 
+								<!-- <includeGroupIds>com.tanukisoftware</includeGroupIds>
 								<includeArtifactIds>wrapper-delta-pack</includeArtifactIds>
-								<includeTypes>zip</includeTypes>
+								<includeTypes>zip</includeTypes> -->
 								<outputDirectory>${project.build.directory}</outputDirectory>
 							</configuration>
 						</execution>
@@ -265,6 +277,8 @@
 	<properties>
 		<wrapper-delta-pack.version>3.5.37</wrapper-delta-pack.version>
 		<project.pack.name>jsw-test</project.pack.name>
+		<jre.version>1.8.0_202</jre.version>
+		<jre.platform>linux-x64</jre.platform>
 	</properties>
 	
 	<dependencyManagement>
@@ -278,11 +292,18 @@
 				<type>zip</type>
 			</dependency>
 			
+			<dependency>
+			    <groupId>com.oracle</groupId>
+			    <artifactId>jre</artifactId>
+			    <version>${jre.version}-${jre.platform}</version>
+			    <type>zip</type>
+			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 	
 	<dependencies>
-		
+
 		<!-- Java Service Wrapper ： https://wrapper.tanukisoftware.com/doc/english/download.jsp#stable -->
 		<dependency>
 			<groupId>com.tanukisoftware</groupId>
@@ -290,7 +311,14 @@
 			<type>zip</type>
 			<scope>provided</scope>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>com.oracle</groupId>
+		    <artifactId>jre</artifactId>
+		    <type>zip</type>
+		    <scope>provided</scope>
+		</dependency>
+			
 	</dependencies>
 	
 </project>

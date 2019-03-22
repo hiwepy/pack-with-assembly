@@ -10,8 +10,8 @@
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>pack-with-assembly-tomcat</module>
 		<module>pack-with-assembly-jsw</module>
+		<module>pack-with-assembly-tomcat</module>
 	</modules>
 	
 	<licenses>
