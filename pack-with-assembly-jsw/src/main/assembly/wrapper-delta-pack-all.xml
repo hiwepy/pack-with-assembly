@@ -6,11 +6,10 @@
 	<formats>
 		<!-- 打包的格式 -->
 		<format>dir</format>
-		<!-- <format>tar.bz2</format> -->
 		<!-- <format>tar.gz</format> -->
 		<!-- <format>jar</format> -->
 		<!-- <format>war</format> -->
-		<!-- <format>zip</format> -->
+		<format>zip</format>
 	</formats>
 	<!-- 打包的文件不包含项目目录，压缩包下直接是文件 -->
 	<includeBaseDirectory>false</includeBaseDirectory>	
@@ -31,19 +30,14 @@
 			<outputDirectory>lib</outputDirectory>
 		</file>
 		<file>
-			<source>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}/doc/wrapper-community-license-1.3.txt</source>
-			<outputDirectory>bin/jsw/license</outputDirectory>
-			<destName>LICENSE.txt</destName>
+			<source>${project.build.directory}/dependency/wrapper-delta-pack-${wrapper-delta-pack.version}/bin/demoapp</source>
+			<outputDirectory>bin</outputDirectory>
+			<destName>${wrapper-delta-pack-setup}</destName>
 		</file>
 		<file>
-			<source>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}/bin/demoapp</source>
+			<source>${project.build.directory}/dependency/wrapper-delta-pack-${wrapper-delta-pack.version}/bin/DemoApp.bat</source>
 			<outputDirectory>bin</outputDirectory>
-			<destName>${project.pack.name}</destName>
-		</file>
-		<file>
-			<source>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}/bin/DemoApp.bat</source>
-			<outputDirectory>bin</outputDirectory>
-			<destName>${project.pack.name}.bat</destName>
+			<destName>${wrapper-delta-pack-setup}.bat</destName>
 		</file>
 		<file>
 			<source>${project.basedir}/README.md</source>
@@ -72,31 +66,33 @@
 			<outputDirectory>conf</outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
+			<directory>${project.build.directory}/dependency/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
 			<fileMode>0755</fileMode>
 			<includes>
 				<include>bin/**</include>
 			</includes>
 			<excludes>
 				<exclude>bin/demoapp</exclude>
-				<exclude>bin/DemoApp.bat</exclude>
+				<exclude>bin/testwrapper</exclude>
+				<exclude>bin/*.bat</exclude>
 			</excludes>
-			<outputDirectory>bin/jsw</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
+			<directory>${project.build.directory}/dependency/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
 			<includes>
 				<include>conf/**</include>
+				<include>doc/**</include>
 				<include>lib/**</include>
 			</includes>
 			<excludes>
 				<exclude>lib/wrapperdemo.jar</exclude>
 				<exclude>lib/wrappertest.jar</exclude>
 			</excludes>
-			<outputDirectory>bin/jsw</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${project.build.directory}/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
+			<directory>${project.build.directory}/dependency/wrapper-delta-pack-${wrapper-delta-pack.version}</directory>
 			<includes>
 				<include>logs/**</include>
 			</includes>
@@ -106,6 +102,14 @@
 			<directory>${project.basedir}/src/main/resources</directory>
 			<includes>
 				<include>temp/**</include>
+			</includes>
+			<outputDirectory></outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/dependency</directory>
+			<fileMode>0755</fileMode>
+			<includes>
+				<include>jre${jre.version}/**</include>
 			</includes>
 			<outputDirectory></outputDirectory>
 		</fileSet>
