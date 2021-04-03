@@ -14,6 +14,7 @@
 		<pluginManagement>
 			<plugins>
 				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-antrun-plugin -->
+				<!-- http://maven.apache.org/plugins/maven-antrun-plugin/ -->
 				<plugin>
 				    <groupId>org.apache.maven.plugins</groupId>
 				    <artifactId>maven-antrun-plugin</artifactId>
@@ -30,6 +31,8 @@
 								<target>
 									<echo message="create temp directory" />
 									<mkdir dir="${project.basedir}/src/main/resources/temp" />
+									<!-- Create a zip file.
+                                	<zip basedir="mydir" destfile="${WORKSPACE}/MyZip.zip" /> -->
 								</target>
 							</configuration>
 						</execution>
@@ -44,6 +47,8 @@
 								<target>
 									<echo message="delete temp directory" />
 									<delete dir="${project.basedir}/src/main/resources/temp" />
+									
+									
 								</target>
 							</configuration>
 						</execution>
@@ -67,18 +72,18 @@
 							</goals>
 							<configuration>
 								<!-- 输出的最终名称，自动添加格式后缀（如zip），当前示例为jsw-test.zip -->
-								<finalName>pack-test</finalName>
+								<finalName>${project.artifactId}-${project.version}</finalName>
 								<!-- 配置是否添加id到名称中，若为true，当前示例中，则为jsw-test-zip.zip，false即不添加，只是jsw-test.zip；
 								若同时打多个包，则可设为true，分别添加id以作区分-->
 								<appendAssemblyId>true</appendAssemblyId>
 								<!-- 打包的输出目录，可自定义，${project.build.directory}为编译输出目录，即target目录 -->
-								<outputDirectory>${project.build.directory}</outputDirectory>
+								<outputDirectory>${project.build.directory}/generated-resources/appassembler/jsw</outputDirectory>
 								<descriptors>
-									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-all.xml</descriptor> -->
+									<descriptor>src/main/assembly/wrapper-delta-pack-all.xml</descriptor>
 									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-aix.xml</descriptor> 
 									<descriptor>src/main/assembly/wrapper-delta-pack-freebsd.xml</descriptor>
 									<descriptor>src/main/assembly/wrapper-delta-pack-hpux.xml</descriptor> -->
-									<descriptor>src/main/assembly/wrapper-delta-pack-linux.xml</descriptor>
+									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-linux.xml</descriptor> -->
 									<!-- <descriptor>src/main/assembly/wrapper-delta-pack-macosx.xml</descriptor>
 									<descriptor>src/main/assembly/wrapper-delta-pack-solaris.xml</descriptor>
 									<descriptor>src/main/assembly/wrapper-delta-pack-windows.xml</descriptor> -->
@@ -95,14 +100,14 @@
 					<executions>
 						<execution>
 							<id>unpack-wrapper</id>
-							<phase>prepare-package<!-- or any other valid maven phase --></phase>
+							<phase>generate-resources<!-- or any other valid maven phase --></phase>
 							<goals>
 								<goal>unpack</goal>
 							</goals>
 							<configuration>
 								<artifactItems>  
 							        <artifactItem>  
-							            <groupId>com.tanukisoftware</groupId>  
+							            <groupId>com.tanukisoftware.wrapper</groupId>  
 							            <artifactId>wrapper-delta-pack</artifactId>  
 							            <type>zip</type>
 							        </artifactItem>
@@ -112,10 +117,10 @@
 									    <type>zip</type>
 							        </artifactItem>
 							    </artifactItems> 
-								<!-- <includeGroupIds>com.tanukisoftware</includeGroupIds>
+								<!-- <includeGroupIds>com.tanukisoftware.wrapper</includeGroupIds>
 								<includeArtifactIds>wrapper-delta-pack</includeArtifactIds>
 								<includeTypes>zip</includeTypes> -->
-								<outputDirectory>${project.build.directory}</outputDirectory>
+								<outputDirectory>${project.build.directory}/dependency</outputDirectory>
 							</configuration>
 						</execution>
 					</executions>
@@ -275,8 +280,8 @@
 	</profiles>
 	
 	<properties>
-		<wrapper-delta-pack.version>3.5.37</wrapper-delta-pack.version>
-		<project.pack.name>jsw-test</project.pack.name>
+		<wrapper-delta-pack.version>3.5.42</wrapper-delta-pack.version>
+		<wrapper-delta-pack-setup>jeebiz-boot</wrapper-delta-pack-setup>
 		<jre.version>1.8.0_202</jre.version>
 		<jre.platform>linux-x64</jre.platform>
 	</properties>
@@ -286,7 +291,7 @@
 
 			<!-- Java Service Wrapper ： https://wrapper.tanukisoftware.com/doc/english/download.jsp#stable -->
 			<dependency>
-				<groupId>com.tanukisoftware</groupId>
+				<groupId>com.tanukisoftware.wrapper</groupId>
 				<artifactId>wrapper-delta-pack</artifactId>
 				<version>${wrapper-delta-pack.version}</version>
 				<type>zip</type>
@@ -306,7 +311,7 @@
 
 		<!-- Java Service Wrapper ： https://wrapper.tanukisoftware.com/doc/english/download.jsp#stable -->
 		<dependency>
-			<groupId>com.tanukisoftware</groupId>
+			<groupId>com.tanukisoftware.wrapper</groupId>
 			<artifactId>wrapper-delta-pack</artifactId>
 			<type>zip</type>
 			<scope>provided</scope>
