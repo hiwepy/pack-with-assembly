@@ -198,7 +198,7 @@
                                         <message>
 	                                        You are running an older version of Maven. This application requires at least Maven ${maven.version}.
 										</message>
-                                        <version>[4.0.0,)</version>
+                                        <version>[4.0.0-rc-5,)</version>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
                                         <message>
