@@ -11,10 +11,10 @@
     <description>基于struts2 + Jackson 的扩展实现</description>
     <packaging>pom</packaging>
     
-    <modules>
-        <module>pack-with-assembly-jsw</module>
-        <module>pack-with-assembly-tomcat</module>
-    </modules>
+    <subprojects>
+        <subproject>pack-with-assembly-jsw</subproject>
+        <subproject>pack-with-assembly-tomcat</subproject>
+    </subprojects>
     
     <licenses>
         <license>
