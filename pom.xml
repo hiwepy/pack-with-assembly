@@ -479,8 +479,4 @@
             </build>
         </profile>
     </profiles>
-    <modules>
-        <module>pack-with-assembly-jsw</module>
-        <module>pack-with-assembly-tomcat</module>
-    </modules>
 </project>
